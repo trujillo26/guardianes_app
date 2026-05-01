@@ -1,0 +1,15 @@
+<h2>Bienvenido {{user.nombre}}</h2>
+<a href="/logout">Salir</a>
+
+<form method="POST">
+  <input name="descripcion" placeholder="Descripcion" required>
+  <input name="latitud" placeholder="Latitud" required>
+  <input name="longitud" placeholder="Longitud" required>
+  <button>Guardar</button>
+</form>
+
+{% for d in data %}
+  <div>
+    {{d.descripcion}} - {{d.estado}} - {{d.fecha}}
+  </div>
+{% endfor %}
