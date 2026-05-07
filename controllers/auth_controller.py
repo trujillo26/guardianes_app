@@ -6,15 +6,17 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        user = AuthService.login(
+        # AuthService ahora retorna un UsuarioDTO o None
+        usuario_dto = AuthService.login(
             request.form["correo"],
             request.form["password"]
         )
 
-        if user:
-            session["user_id"] = user["id"]
-            session["nombre"] = user["nombre"]
-            session["rol"] = user["rol"]
+        if usuario_dto:
+            # Se almacena el dict del DTO en sesión (sin password)
+            session["user_id"] = usuario_dto.id
+            session["nombre"] = usuario_dto.nombre
+            session["rol"] = usuario_dto.rol
             return redirect("/dashboard")
 
     return render_template("login.html")

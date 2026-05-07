@@ -27,6 +27,33 @@ def init_db():
     )
     """)
 
+    # Tabla para publicaciones del dashboard (texto libre desde Principal.html)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS publicaciones(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        descripcion TEXT NOT NULL,
+        fecha TEXT NOT NULL,
+        usuario_id INTEGER NOT NULL,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    )
+    """)
+
+    # Tabla para el formulario detallado (nombre, cedula, direccion, imagen)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS reportes(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL,
+        cedula TEXT NOT NULL,
+        direccion TEXT NOT NULL,
+        descripcion TEXT NOT NULL,
+        imagen TEXT,
+        fecha TEXT NOT NULL,
+        estado TEXT DEFAULT 'Pendiente',
+        usuario_id INTEGER NOT NULL,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    )
+    """)
+
     admin = cur.execute(
         "SELECT * FROM usuarios WHERE correo=?",
         ("admin@admin.com",)

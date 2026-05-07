@@ -1,5 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.user_dao import UserDAO
+from dto.usuario_dto import UsuarioDTO
 
 class AuthService:
 
@@ -10,7 +11,11 @@ class AuthService:
 
     @staticmethod
     def login(correo, password):
-        user = UserDAO.find_by_email(correo)
-        if user and check_password_hash(user["password"], password):
-            return user
+        """
+        Autentica al usuario y retorna un UsuarioDTO (sin password).
+        Retorna None si las credenciales son inválidas.
+        """
+        row = UserDAO.find_by_email(correo)
+        if row and check_password_hash(row["password"], password):
+            return UsuarioDTO.from_row(row)
         return None
