@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='principal.css') }}">
+</head>
+<body>
+
+<header class="header">
+    <h1>REPORTE</h1>
+    <nav>
+        <a href="#">Contacto</a>
+        <a href="#">Policía</a>
+        <div class="user">{{ user.nombre[0] | upper }}</div>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="card">
+
+        <div class="card-header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Escudo_Polic%C3%ADa_Nacional_de_Colombia.svg/240px-Escudo_Polic%C3%ADa_Nacional_de_Colombia.svg.png" alt="logo">
+            <span>Policía Nacional</span>
+        </div>
+
+        <form method="POST" action="/publicacion">
+            <textarea name="descripcion" placeholder="Aquí Podrán Publicar Un Texto Sobre Su Publicación" required></textarea>
+
+            <div class="photo-box">
+                <span>FOTO</span>
+            </div>
+
+            <button type="submit" class="btn-publicar">PUBLICA</button>
+        </form>
+
+    </div>
+</main>
+
+<!-- Listado de reportes recientes -->
+<section class="reportes-lista">
+    {% for d in data %}
+    <div class="reporte-item">
+        <strong>{{ d.descripcion }}</strong>
+        <div class="meta">Estado: {{ d.estado }} &nbsp;|&nbsp; Fecha: {{ d.fecha }}</div>
+    </div>
+    {% else %}
+    <p style="text-align:center; color:#aaa;">No hay reportes aún.</p>
+    {% endfor %}
+</section>
+
+<p style="text-align:center; margin-top: 20px;">
+    <a href="/logout" style="color: red; font-size: 13px;">Cerrar sesión</a>
+</p>
+
+</body>
+</html>

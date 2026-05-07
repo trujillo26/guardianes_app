@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='formulario.css') }}">
+</head>
+<body>
+
+<header class="header">
+    <span class="icon">&#9673;</span>
+    <h1>FORMULARIO</h1>
+    <div class="right">
+        <a href="/dashboard" class="btn-regresar">REGRESAR</a>
+        <div class="user">{{ user.nombre[0] | upper }}</div>
+    </div>
+</header>
+
+<main>
+    <form class="form-container" method="POST" action="/publicacion" enctype="multipart/form-data">
+
+        {% if mensaje %}
+        <p class="mensaje-ok">{{ mensaje }}</p>
+        {% endif %}
+        {% if error %}
+        <p class="mensaje-error">{{ error }}</p>
+        {% endif %}
+
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="cedula">Cédula</label>
+        <input type="text" id="cedula" name="cedula" required>
+
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" name="direccion" required>
+
+        <label for="descripcion">Texto (Descripción)</label>
+        <input type="text" id="descripcion" name="descripcion" required>
+
+        <label for="imagen">Imagen</label>
+        <div class="image-box">
+            <input type="file" id="imagen" name="imagen" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn-enviar">ENVIAR</button>
+
+    </form>
+</main>
+
+</body>
+</html>
