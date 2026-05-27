@@ -1,3 +1,14 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+    --rojo: #cc0000;
+    --rojo-hover: #ff1a1a;
+    --gris-header: #7b6565;
+    --negro: #000000;
+    --blanco: #ffffff;
+    --gris-input: #d9d9d9;
+    --gris-oscuro: #1a1a1a;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -10,13 +21,16 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #7b6565;
+    background-color: var(--gris-header);
     padding: 10px 20px;
 }
 
 .header h1 {
-    color: red;
+    font-family: 'Oswald', Arial, sans-serif;
+    color: var(--rojo);
     margin: 0;
+    font-size: 22px;
+    letter-spacing: 3px;
 }
 
 .header nav {
@@ -31,6 +45,14 @@ body {
     font-size: 14px;
 }
 
+.btn-logout {
+    background: var(--negro);
+    color: var(--rojo) !important;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px !important;
+}
+
 .user {
     background-color: white;
     color: black;
@@ -41,6 +63,7 @@ body {
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    font-size: 14px; 
 }
 
 /* CONTENIDO */
@@ -59,6 +82,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-top: 40px;
 }
 
 .card-header img {
@@ -77,6 +101,8 @@ textarea {
     color: white;
     padding: 10px;
     resize: none;
+    font-family: inherit;
+    font-size: 14px;
     box-sizing: border-box;
 }
 
@@ -84,7 +110,7 @@ textarea {
 .photo-box {
     margin-top: 15px;
     height: 200px;
-    background-color: #d9d9d9;
+    background-color: var(--gris-input);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -103,6 +129,13 @@ textarea {
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+    font-family: 'Oswald', Arial, sans-serif;
+    letter-spacing: 1px;
+    font-size: 13px;
+    transition: background 0.2s; 
+}
+.btn-publicar:hover {
+    background-color: var(--rojo-hover);
 }
 
 /* LISTADO DE REPORTES */
@@ -110,19 +143,41 @@ textarea {
     max-width: 800px;
     margin: 30px auto;
     clear: both;
+    padding: 0 16px;
 }
 
-.reporte-item {
-    background-color: #1a1a1a;
-    border: 1px solid #333;
-    border-left: 4px solid red;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    border-radius: 4px;
+.section-title {
+    font-family: 'Oswald', Arial, sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--rojo);
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
 }
 
-.reporte-item .meta {
-    font-size: 12px;
-    color: #aaa;
-    margin-top: 5px;
+.reporte-item.aprobado { border-left-color: #00cc66; }
+.reporte-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
 }
+.reporte-desc { font-size: 14px; color: #ccc; margin-bottom: 6px; }
+.meta { font-size: 11px; color: #666; }
+ 
+/* ── BADGES ── */
+.badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.badge-aprobado  { background: rgba(0,204,102,0.15); color: #00cc66; border: 1px solid #00cc66; }
+.badge-pendiente { background: rgba(255,170,0,0.15); color: #ffaa00; border: 1px solid #ffaa00; }
+.badge-rechazado { background: rgba(204,0,0,0.15);   color: #ff4444; border: 1px solid #ff4444; }
+ 
+.empty-msg { text-align: center; color: #555; font-size: 14px; padding: 20px 0; }

@@ -12,7 +12,8 @@
     <nav>
         <a href="#">Contacto</a>
         <a href="#">Policía</a>
-        <div class="user">{{ user.nombre[0] | upper }}</div>
+        <div class="user">{{ session.nombre[0] | upper }}</div>
+        <a href="/logout" class="btn-logout">Salir</a>
     </nav>
 </header>
 
@@ -27,31 +28,34 @@
         <form method="POST" action="/publicacion">
             <textarea name="descripcion" placeholder="Aquí Podrán Publicar Un Texto Sobre Su Publicación" required></textarea>
 
-            <div class="photo-box">
+            <div class="photo-box"<span>FOTO</span></div>
+            <a href="/formulario" class="btn-publicar">PUBLICAR</a>
                 <span>FOTO</span>
             </div>
-
-            <button type="submit" class="btn-publicar">PUBLICA</button>
         </form>
 
     </div>
 </main>
 
-<!-- Listado de reportes recientes -->
+<!-- Reportes APROBADOS visibles para todos los usuarios -->
 <section class="reportes-lista">
-    {% for d in data %}
-    <div class="reporte-item">
-        <strong>{{ d.descripcion }}</strong>
-        <div class="meta">Estado: {{ d.estado }} &nbsp;|&nbsp; Fecha: {{ d.fecha }}</div>
+    <h2 class="section-title">Reportes aprobados</h2>
+ 
+    {% for r in reportes_aprobados %}
+    <div class="reporte-item aprobado">
+        <div class="reporte-top">
+            <strong>{{ r.nombre }}</strong>
+            <span class="badge badge-aprobado">Aprobado</span>
+        </div>
+        <p class="reporte-desc">{{ r.descripcion }}</p>
+        <div class="meta">
+            📍 {{ r.direccion }} &nbsp;|&nbsp; 🗓 {{ r.fecha }}
+        </div>
     </div>
     {% else %}
-    <p style="text-align:center; color:#aaa;">No hay reportes aún.</p>
+    <p class="empty-msg">No hay reportes aprobados aún.</p>
     {% endfor %}
 </section>
-
-<p style="text-align:center; margin-top: 20px;">
-    <a href="/logout" style="color: red; font-size: 13px;">Cerrar sesión</a>
-</p>
 
 </body>
 </html>

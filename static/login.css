@@ -1,0 +1,170 @@
+:root {
+    --rojo: #cc0000;
+    --rojo-hover: #ff1a1a;
+    --gris-header: #7b6565;
+    --negro: #000000;
+    --blanco: #ffffff;
+    --gris-input: #d9d9d9;
+    --gris-oscuro: #1a1a1a;
+        }
+
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: var(--negro);
+    color: var(--blanco);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+        }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--gris-header);
+    padding: 10px 20px;
+        }
+.header h1 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--rojo);
+    font-size: 22px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0;
+        }
+.header-escudo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--negro);
+    border: 2px solid var(--rojo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    color: var(--rojo);
+    font-weight: 700;
+        }
+
+.page-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background:
+            repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(204,0,0,0.04) 39px, rgba(204,0,0,0.04) 40px),
+            repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(204,0,0,0.04) 39px, rgba(204,0,0,0.04) 40px),
+            var(--negro);
+        }
+
+.card {
+    width: 100%;
+    max-width: 360px;
+    background: var(--gris-oscuro);
+    border-top: 4px solid var(--rojo);
+    padding: 36px 32px 32px;
+    animation: slideUp 0.4s ease both;
+        }
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+        }
+
+.card-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 26px;
+    color: var(--blanco);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+        }
+.card-sub {
+    font-size: 12px;
+    color: var(--gris-header);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+        }
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #333;
+    margin-bottom: 24px;
+        }
+.tab {
+    flex: 1;
+    padding: 8px 0;
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+        }
+.tab.active {
+    color: var(--rojo);
+    border-bottom-color: var(--rojo);
+        }
+
+.form-section { display: none; }
+.form-section.active { display: block; }
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 16px;
+        }
+.field label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #888;
+        }
+.field input {
+    height: 38px;
+    background: var(--gris-input);
+    border: none;
+    border-left: 3px solid transparent;
+    padding: 0 10px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--negro);
+    transition: border-color 0.2s;
+    outline: none;
+    width: 100%;
+        }
+.field input:focus { border-left-color: var(--rojo); }
+
+.btn {
+    width: 100%;
+    height: 42px;
+    background: var(--rojo);
+    color: var(--blanco);
+    border: none;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 8px;
+     transition: background 0.2s, transform 0.1s;
+        }
+.btn:hover  { background: var(--rojo-hover); }
+.btn:active { transform: scale(0.98); }
+
+.msg {
+    font-size: 12px;
+    padding: 8px 10px;
+    margin-bottom: 16px;
+    border-left: 3px solid;
+        }
+.msg-error { color: #ff6b6b; border-color: var(--rojo); background: rgba(204,0,0,0.08); }
+.msg-ok    { color: #6bffb2; border-color: #00cc66; background: rgba(0,204,102,0.08); }

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Guardianes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+
+<header class="header">
+    <h1>PANEL ADMIN</h1>
+    <nav>
+        <span class="admin-badge">Admin</span>
+        <div class="user">{{ session.nombre[0] | upper }}</div>
+        <a href="/logout" class="btn-logout">Salir</a>
+    </nav>
+</header>
+
+<main class="admin-container">
+
+    <!-- ESTADÍSTICAS -->
+    <div class="stats-bar">
+        <div class="stat">
+            <span class="stat-num">{{ total }}</span>
+            <span class="stat-label">Total</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num pendiente">{{ pendientes }}</span>
+            <span class="stat-label">Pendientes</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num aprobado">{{ aprobados }}</span>
+            <span class="stat-label">Aprobados</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num rechazado">{{ rechazados }}</span>
+            <span class="stat-label">Rechazados</span>
+        </div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="filtros">
+        <a href="/admin?estado=todos"     class="filtro {% if filtro == 'todos'     %}active{% endif %}">Todos</a>
+        <a href="/admin?estado=Pendiente" class="filtro {% if filtro == 'Pendiente' %}active{% endif %}">Pendientes</a>
+        <a href="/admin?estado=Aprobado"  class="filtro {% if filtro == 'Aprobado'  %}active{% endif %}">Aprobados</a>
+        <a href="/admin?estado=Rechazado" class="filtro {% if filtro == 'Rechazado' %}active{% endif %}">Rechazados</a>
+    </div>
+
+    <!-- TABLA DE REPORTES -->
+    {% if reportes %}
+    <div class="tabla-wrapper">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Cédula</th>
+                    <th>Dirección</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for r in reportes %}
+            <tr class="fila-{{ r.estado | lower }}">
+                <td>{{ r.id }}</td>
+                <td>{{ r.nombre }}</td>
+                <td>{{ r.cedula }}</td>
+                <td>{{ r.direccion }}</td>
+                <td class="desc-cell">{{ r.descripcion }}</td>
+                <td>{{ r.fecha }}</td>
+                <td>
+                    <span class="badge badge-{{ r.estado | lower }}">{{ r.estado }}</span>
+                </td>
+                <td class="acciones">
+                    {% if r.estado != 'Aprobado' %}
+                    <form method="POST" action="/admin/aprobar/{{ r.id }}" style="display:inline">
+                        <button type="submit" class="btn-accion aprobar">✔ Aprobar</button>
+                    </form>
+                    {% endif %}
+                    {% if r.estado != 'Rechazado' %}
+                    <form method="POST" action="/admin/rechazar/{{ r.id }}" style="display:inline">
+                        <button type="submit" class="btn-accion rechazar">✘ Rechazar</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-msg">No hay reportes en esta categoría.</p>
+    {% endif %}
+
+</main>
+
+</body>
+</html>

@@ -1,5 +1,85 @@
-<form method="POST">
-  <input name="correo" placeholder="Correo" required>
-  <input name="password" type="password" placeholder="Password" required>
-  <button>Login</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guardianes - Acceso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+
+<header class="header">
+    <h1>Guardianes</h1>
+    <div class="header-escudo">GN</div>
+</header>
+
+<div class="page-body">
+    <div class="card">
+        <div class="card-title">Acceso</div>
+        <div class="card-sub">Sistema de reportes ciudadanos</div>
+
+        <div class="tabs">
+            <div class="tab active" id="tab-btn-login"    onclick="switchTab('login')">Ingresar</div>
+            <div class="tab"        id="tab-btn-registro" onclick="switchTab('registro')">Registrarse</div>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="tab-login" class="form-section active">
+            {% if error_login is defined and error_login %}
+            <div class="msg msg-error">{{ error_login }}</div>
+            {% endif %}
+            <form method="POST" action="/login">
+                <div class="field">
+                    <label>Correo</label>
+                    <input type="email" name="correo" placeholder="usuario@correo.com" required>
+                </div>
+                <div class="field">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn">Ingresar</button>
+            </form>
+        </div>
+
+        <!-- REGISTRO -->
+        <div id="tab-registro" class="form-section">
+            {% if error_registro is defined and error_registro %}
+            <div class="msg msg-error">{{ error_registro }}</div>
+            {% endif %}
+            {% if ok_registro is defined and ok_registro %}
+            <div class="msg msg-ok">{{ ok_registro }}</div>
+            {% endif %}
+            <form method="POST" action="/registro">
+                <div class="field">
+                    <label>Nombre completo</label>
+                    <input type="text" name="nombre" placeholder="Juan Pérez" required>
+                </div>
+                <div class="field">
+                    <label>Correo</label>
+                    <input type="email" name="correo" placeholder="usuario@correo.com" required>
+                </div>
+                <div class="field">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn">Crear cuenta</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function switchTab(tab) {
+        document.getElementById('tab-btn-login').classList.toggle('active', tab === 'login');
+        document.getElementById('tab-btn-registro').classList.toggle('active', tab === 'registro');
+        document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+        document.getElementById('tab-registro').classList.toggle('active', tab === 'registro');
+    }
+
+    // Abrir tab correcto según respuesta del servidor
+    var tabActivo = "{{ tab_activo | default('login') }}";
+    if (tabActivo === 'registro') switchTab('registro');
+</script>
+
+</body>
+</html>

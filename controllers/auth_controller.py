@@ -19,9 +19,51 @@ def login():
             session["rol"] = usuario_dto.rol
             return redirect("/dashboard")
 
-    return render_template("login.html")
-
-
+        
+        return render_template(
+            "login.html",
+            error_login="Correo o contraseña incorrectos.",
+            tab_activo="login"
+        )
+ 
+    return render_template("login.html", tab_activo="login")
+ 
+ 
+@auth_bp.route("/registro", methods=["POST"])
+def registro():
+    nombre   = request.form.get("nombre", "").strip()
+    correo   = request.form.get("correo", "").strip()
+    password = request.form.get("password", "")
+ 
+    if not all([nombre, correo, password]):
+        return render_template(
+            "login.html",
+            error_registro="Todos los campos son obligatorios.",
+            tab_activo="registro"
+        )
+ 
+    if len(password) < 6:
+        return render_template(
+            "login.html",
+            error_registro="La contraseña debe tener mínimo 6 caracteres.",
+            tab_activo="registro"
+        )
+ 
+    try:
+        AuthService.register(nombre, correo, password)
+        return render_template(
+            "login.html",
+            ok_registro="¡Cuenta creada exitosamente! Ya puedes ingresar.",
+            tab_activo="registro"
+        )
+    except Exception:
+        return render_template(
+            "login.html",
+            error_registro="Ese correo ya está registrado.",
+            tab_activo="registro"
+        )
+ 
+ 
 @auth_bp.route("/logout")
 def logout():
     session.clear()
