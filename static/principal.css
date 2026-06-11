@@ -1,4 +1,5 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
     --rojo: #cc0000;
     --rojo-hover: #ff1a1a;
@@ -11,12 +12,12 @@
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: black;
-    color: white;
+    font-family: 'Roboto Condensed', Arial, sans-serif;
+    background-color: var(--negro);
+    color: var(--blanco);
 }
 
-/* HEADER */
+/* ── HEADER ── */
 .header {
     display: flex;
     justify-content: space-between;
@@ -24,7 +25,6 @@ body {
     background-color: var(--gris-header);
     padding: 10px 20px;
 }
-
 .header h1 {
     font-family: 'Oswald', Arial, sans-serif;
     color: var(--rojo);
@@ -32,19 +32,16 @@ body {
     font-size: 22px;
     letter-spacing: 3px;
 }
-
 .header nav {
     display: flex;
     align-items: center;
     gap: 15px;
 }
-
 .header nav a {
-    color: red;
+    color: var(--rojo);
     text-decoration: none;
     font-size: 14px;
 }
-
 .btn-logout {
     background: var(--negro);
     color: var(--rojo) !important;
@@ -52,10 +49,22 @@ body {
     border-radius: 4px;
     font-size: 12px !important;
 }
-
+.btn-admin {
+    background: var(--rojo);
+    color: var(--blanco) !important;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 11px !important;
+    font-family: 'Oswald', Arial, sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.btn-admin:hover { background: var(--rojo-hover); }
 .user {
-    background-color: white;
-    color: black;
+    background-color: var(--blanco);
+    color: var(--negro);
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -63,50 +72,40 @@ body {
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 14px; 
+    font-size: 14px;
 }
 
-/* CONTENIDO */
+/* ── CARD PUBLICAR ── */
 .container {
     display: flex;
     justify-content: center;
     margin-top: 40px;
 }
-
-.card {
-    width: 400px;
-}
-
-/* ENCABEZADO DE TARJETA */
+.card { width: 400px; }
 .card-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 40px;
+    margin-bottom: 4px;
 }
-
 .card-header img {
     border-radius: 50%;
     width: 40px;
     height: 40px;
 }
-
-/* TEXTAREA */
 textarea {
     width: 100%;
     height: 80px;
     margin-top: 10px;
     background: transparent;
     border: 1px dashed #00bfff;
-    color: white;
+    color: var(--blanco);
     padding: 10px;
     resize: none;
     font-family: inherit;
     font-size: 14px;
     box-sizing: border-box;
 }
-
-/* CAJA DE FOTO */
 .photo-box {
     margin-top: 15px;
     height: 200px;
@@ -115,15 +114,13 @@ textarea {
     justify-content: center;
     align-items: center;
     border: 1px dashed #00bfff;
-    color: black;
+    color: var(--negro);
 }
-
-/* BOTÓN */
 .btn-publicar {
     margin-top: 15px;
     float: right;
-    background-color: red;
-    color: white;
+    background-color: var(--rojo);
+    color: var(--blanco);
     border: none;
     padding: 10px 15px;
     cursor: pointer;
@@ -132,20 +129,11 @@ textarea {
     font-family: 'Oswald', Arial, sans-serif;
     letter-spacing: 1px;
     font-size: 13px;
-    transition: background 0.2s; 
+    transition: background 0.2s;
 }
-.btn-publicar:hover {
-    background-color: var(--rojo-hover);
-}
+.btn-publicar:hover { background: var(--rojo-hover); }
 
-/* LISTADO DE REPORTES */
-.reportes-lista {
-    max-width: 800px;
-    margin: 30px auto;
-    clear: both;
-    padding: 0 16px;
-}
-
+/* ── SECCIÓN TÍTULOS ── */
 .section-title {
     font-family: 'Oswald', Arial, sans-serif;
     font-size: 16px;
@@ -157,6 +145,56 @@ textarea {
     margin-bottom: 16px;
 }
 
+/* ── MAPA DE BOGOTÁ ── */
+.mapa-section {
+    max-width: 800px;
+    margin: 50px auto 0;
+    padding: 0 16px;
+    clear: both;
+}
+.mapa-wrapper {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    border: 1px solid #2a2a2a;
+    border-left: 4px solid var(--rojo);
+    overflow: hidden;
+}
+#mapa-bogota {
+    width: 100%;
+    height: 100%;
+    /* Oscurece y desatura las teselas del mapa para integrarlo al tema dark */
+    filter: grayscale(0.4) brightness(0.55) contrast(1.1);
+}
+/* Overlay rojo/negro semitransparente sobre el mapa (efecto "dark mode") */
+.mapa-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(0,0,0,0.45) 0%,
+        rgba(204,0,0,0.12) 50%,
+        rgba(0,0,0,0.45) 100%
+    );
+    pointer-events: none;
+    z-index: 400; /* por debajo de los popups de Leaflet (z-index 700) */
+}
+
+/* ── SECCIÓN REPORTES APROBADOS ── */
+.reportes-lista {
+    max-width: 800px;
+    margin: 30px auto 30px;
+    clear: both;
+    padding: 0 16px;
+}
+.reporte-item {
+    background-color: var(--gris-oscuro);
+    border: 1px solid #2a2a2a;
+    border-left: 4px solid var(--rojo);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+}
 .reporte-item.aprobado { border-left-color: #00cc66; }
 .reporte-top {
     display: flex;
@@ -166,7 +204,7 @@ textarea {
 }
 .reporte-desc { font-size: 14px; color: #ccc; margin-bottom: 6px; }
 .meta { font-size: 11px; color: #666; }
- 
+
 /* ── BADGES ── */
 .badge {
     font-size: 10px;
@@ -179,5 +217,5 @@ textarea {
 .badge-aprobado  { background: rgba(0,204,102,0.15); color: #00cc66; border: 1px solid #00cc66; }
 .badge-pendiente { background: rgba(255,170,0,0.15); color: #ffaa00; border: 1px solid #ffaa00; }
 .badge-rechazado { background: rgba(204,0,0,0.15);   color: #ff4444; border: 1px solid #ff4444; }
- 
+
 .empty-msg { text-align: center; color: #555; font-size: 14px; padding: 20px 0; }

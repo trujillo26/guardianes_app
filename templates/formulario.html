@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Formulario</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='formulario.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -43,10 +45,46 @@
             <input type="file" id="imagen" name="imagen" accept="image/*">
         </div>
 
+        <label>Ubicación del incidente (toca el mapa para marcar)</label>
+        <div id="mapa-formulario" class="mapa-form"></div>
+        <p class="mapa-hint">Lat: <span id="lat-display">--</span> &nbsp; Lng: <span id="lng-display">--</span></p>
+
+        <input type="hidden" id="latitud" name="latitud">
+        <input type="hidden" id="longitud" name="longitud">
+
         <button type="submit" class="btn-enviar">ENVIAR</button>
 
     </form>
 </main>
+
+<script>
+    // Centro por defecto: Bogotá
+    const bogota = [4.7110, -74.0721];
+
+    const mapa = L.map('mapa-formulario').setView(bogota, 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(mapa);
+
+    let marcador = null;
+
+    mapa.on('click', function (e) {
+        const { lat, lng } = e.latlng;
+
+        if (marcador) {
+            marcador.setLatLng(e.latlng);
+        } else {
+            marcador = L.marker(e.latlng).addTo(mapa);
+        }
+
+        document.getElementById('latitud').value = lat.toFixed(6);
+        document.getElementById('longitud').value = lng.toFixed(6);
+        document.getElementById('lat-display').innerText = lat.toFixed(6);
+        document.getElementById('lng-display').innerText = lng.toFixed(6);
+    });
+</script>
 
 </body>
 </html>

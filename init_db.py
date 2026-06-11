@@ -27,7 +27,6 @@ def init_db():
     )
     """)
 
-    # Tabla para publicaciones del dashboard (texto libre desde Principal.html)
     cur.execute("""
     CREATE TABLE IF NOT EXISTS publicaciones(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,7 +37,7 @@ def init_db():
     )
     """)
 
-    # Tabla para el formulario detallado (nombre, cedula, direccion, imagen)
+    # Tabla principal de reportes (formulario detallado + ubicación)
     cur.execute("""
     CREATE TABLE IF NOT EXISTS reportes(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,6 +46,8 @@ def init_db():
         direccion TEXT NOT NULL,
         descripcion TEXT NOT NULL,
         imagen TEXT,
+        latitud REAL,
+        longitud REAL,
         fecha TEXT NOT NULL,
         estado TEXT DEFAULT 'Pendiente',
         usuario_id INTEGER NOT NULL,
@@ -54,6 +55,14 @@ def init_db():
     )
     """)
 
+    # Migración suave: si la tabla reportes ya existía sin lat/lng, agregarlas
+    cols = [c["name"] for c in cur.execute("PRAGMA table_info(reportes)").fetchall()]
+    if "latitud" not in cols:
+        cur.execute("ALTER TABLE reportes ADD COLUMN latitud REAL")
+    if "longitud" not in cols:
+        cur.execute("ALTER TABLE reportes ADD COLUMN longitud REAL")
+
+    # Crear admin por defecto si no existe
     admin = cur.execute(
         "SELECT * FROM usuarios WHERE correo=?",
         ("admin@admin.com",)
@@ -61,7 +70,7 @@ def init_db():
 
     if not admin:
         cur.execute("""
-        INSERT INTO usuarios(nombre,correo,password,rol)
+        INSERT INTO usuarios(nombre, correo, password, rol)
         VALUES(?,?,?,?)
         """, (
             "Admin",

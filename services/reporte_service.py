@@ -1,12 +1,12 @@
 import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
-from models.reporte_dao import ReporteDAO
 from dto.reporte_dto import ReporteDTO
 from strategies.validacion_strategy import (
     ValidacionReporte, ValidacionCedula,
     ValidacionImagen, ValidadorCompuesto
 )
+from workers.reporte_worker import encolar_reporte
 
 UPLOAD_FOLDER = os.path.join("static", "uploads")
 
@@ -17,13 +17,15 @@ _validador = ValidadorCompuesto([
     ValidacionImagen()
 ])
 
+
 class ReporteService:
 
     @staticmethod
     def crear(dto: ReporteDTO):
         """
-        Recibe un ReporteDTO, lo valida con Strategy y lo persiste.
-        Guarda la imagen en disco si viene adjunta.
+        Valida el reporte (Strategy) y lo ENCOLA para ser guardado por
+        el worker en segundo plano (patrón Productor-Consumidor),
+        incluyendo su ubicación en el mapa de Bogotá.
         """
         _validador.validar(dto)
 
@@ -36,14 +38,14 @@ class ReporteService:
             dto.imagen_file.save(os.path.join(UPLOAD_FOLDER, filename))
             imagen_path = filename
 
-        data = (
+        # Productor: encola el reporte (con coordenadas) en lugar de guardarlo directamente
+        encolar_reporte(
             dto.nombre,
             dto.cedula,
             dto.direccion,
             dto.descripcion,
             imagen_path,
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "Pendiente",
+            dto.latitud,
+            dto.longitud,
             dto.usuario_id
         )
-        ReporteDAO.create(data)

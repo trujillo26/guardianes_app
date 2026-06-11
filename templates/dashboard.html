@@ -2,8 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte</title>
+    <title>Dashboard - Guardianes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Condensed:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='principal.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -12,6 +15,9 @@
     <nav>
         <a href="#">Contacto</a>
         <a href="#">Policía</a>
+        {% if session.rol == 'admin' %}
+        <a href="/admin" class="btn-admin">PANEL ADMIN</a>
+        {% endif %}
         <div class="user">{{ session.nombre[0] | upper }}</div>
         <a href="/logout" class="btn-logout">Salir</a>
     </nav>
@@ -25,22 +31,29 @@
             <span>Policía Nacional</span>
         </div>
 
+        <!-- Texto OPCIONAL, no se guarda como reporte -->
         <form method="POST" action="/publicacion">
-            <textarea name="descripcion" placeholder="Aquí Podrán Publicar Un Texto Sobre Su Publicación" required></textarea>
-
-            <div class="photo-box"<span>FOTO</span></div>
-            <a href="/formulario" class="btn-publicar">PUBLICAR</a>
-                <span>FOTO</span>
-            </div>
+            <textarea name="descripcion" placeholder="Escribe un comentario opcional antes de publicar tu reporte..."></textarea>
+            <div class="photo-box"><span>FOTO</span></div>
+            <a href="/formulario" class="btn-publicar">IR AL FORMULARIO</a>
         </form>
 
     </div>
 </main>
 
-<!-- Reportes APROBADOS visibles para todos los usuarios -->
+<!-- MAPA DE BOGOTÁ con reportes aprobados -->
+<section class="mapa-section">
+    <h2 class="section-title">Mapa de reportes aprobados — Bogotá</h2>
+    <div class="mapa-wrapper">
+        <div id="mapa-bogota"></div>
+        <div class="mapa-overlay"></div>
+    </div>
+</section>
+
+<!-- LISTA de reportes aprobados -->
 <section class="reportes-lista">
     <h2 class="section-title">Reportes aprobados</h2>
- 
+
     {% for r in reportes_aprobados %}
     <div class="reporte-item aprobado">
         <div class="reporte-top">
@@ -56,6 +69,42 @@
     <p class="empty-msg">No hay reportes aprobados aún.</p>
     {% endfor %}
 </section>
+
+<script>
+    // Centro: Bogotá
+    const bogota = [4.7110, -74.0721];
+    const mapa = L.map('mapa-bogota').setView(bogota, 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(mapa);
+
+    // Reportes aprobados con coordenadas válidas (inyectados desde Flask/Jinja2)
+    const reportes = [
+        {% for r in reportes_aprobados %}
+            {% if r.latitud and r.longitud %}
+            {
+                lat: {{ r.latitud }},
+                lng: {{ r.longitud }},
+                nombre: {{ r.nombre | tojson }},
+                descripcion: {{ r.descripcion | tojson }},
+                direccion: {{ r.direccion | tojson }},
+                fecha: {{ r.fecha | tojson }}
+            },
+            {% endif %}
+        {% endfor %}
+    ];
+
+    reportes.forEach(rep => {
+        L.marker([rep.lat, rep.lng]).addTo(mapa)
+            .bindPopup(
+                `<strong>${rep.nombre}</strong><br>` +
+                `${rep.descripcion}<br>` +
+                `<small>${rep.direccion} — ${rep.fecha}</small>`
+            );
+    });
+</script>
 
 </body>
 </html>
